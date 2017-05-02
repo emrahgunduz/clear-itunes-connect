@@ -57,26 +57,25 @@ function r ( fn ) {
 }
 
 var removeDeletedOnes = function(elements){
-	for(var e in elements) {
-		if(!elements.hasOwnProperty(e)) continue;
-		var a = elements[e];
-		var parent = a.findClosestParentByTag("tr");
-		if (!!parent) parent.removeFromParent();
-	}
+  for(var e in elements) {
+    if(!elements.hasOwnProperty(e)) continue;
+    var a = elements[e];
+    var parent = a.findClosestParentByTag("tr");
+    if (!!parent) parent.removeFromParent();
+  }
 };
 
 var asyncCheckForExistence = function(){
-	var elements = document.querySelectorAll(".status.attn");
-	if(elements.length) removeDeletedOnes(elements);
+  var elements = document.querySelectorAll(".status.attn");
+  if(elements.length) removeDeletedOnes(elements);
 
-	setTimeout(function(){
-		asyncCheckForExistence();
-	}, 1000);
+  setTimeout(function(){
+    asyncCheckForExistence();
+  }, 1000);
 };
 
 r(function(){
-
-	var url = window.location.href;
+  var url = window.location.href;
 
   var isItunes = url.contains("itunesconnect.apple.com");
   var isIAP = url.contains("addons");
@@ -87,5 +86,4 @@ r(function(){
     return;
   else
     asyncCheckForExistence();
-
 });
