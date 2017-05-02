@@ -66,7 +66,7 @@ var removeDeletedOnes = function(elements){
 };
 
 var asyncCheckForExistence = function(){
-	var elements = document.getElementsByClassName(".status.attn");
+	var elements = document.querySelectorAll(".status.attn");
 	if(elements.length) removeDeletedOnes(elements);
 
 	setTimeout(function(){
