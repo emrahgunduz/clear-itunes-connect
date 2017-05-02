@@ -14,31 +14,32 @@ HTMLElement.prototype.findClosestParentByTag = function ( tagName ) {
 };
 
 function r ( fn ) {
-  var done = false, top = true,
+  var done = false;
+  var top = true;
 
-      doc               = window.document,
-      root              = doc.documentElement,
-      modern            = doc.addEventListener,
+  var doc = window.document;
+  var root = doc.documentElement;
+  var modern = doc.addEventListener;
 
-      add               = modern ? "addEventListener" : "attachEvent",
-      rem               = modern ? "removeEventListener" : "detachEvent",
-      pre               = modern ? "" : "on",
+  var add = modern ? "addEventListener" : "attachEvent";
+  var rem = modern ? "removeEventListener" : "detachEvent";
+  var pre = modern ? "" : "on";
 
-      init              = function ( e ) {
-        if ( e.type === "readystatechange" && doc.readyState !== "complete" ) return;
-        (e.type === "load" ? window : doc)[ rem ]( pre + e.type, init, false );
-        if ( !done && (done = true) ) fn.call( window, e.type || e );
-      },
+  var init = function ( e ) {
+    if ( e.type === "readystatechange" && doc.readyState !== "complete" ) return;
+    (e.type === "load" ? window : doc)[ rem ]( pre + e.type, init, false );
+    if ( !done && (done = true) ) fn.call( window, e.type || e );
+  };
 
-      poll              = function () {
-        try {
-          root.doScroll( "left" );
-        } catch ( e ) {
-          setTimeout( poll, 50 );
-          return;
-        }
-        init( "poll" );
-      };
+  var poll = function () {
+    try {
+      root.doScroll( "left" );
+    } catch ( e ) {
+      setTimeout( poll, 50 );
+      return;
+    }
+    init( "poll" );
+  };
 
   if ( doc.readyState === "complete" ) fn.call( window, "lazy" );
   else {
@@ -55,9 +56,7 @@ function r ( fn ) {
   }
 }
 
-var removeDeletedOnes = function(){
-	var elements = document.querySelectorAll(".status.attn");
-	
+var removeDeletedOnes = function(elements){
 	for(var e in elements) {
 		if(!elements.hasOwnProperty(e)) continue;
 		var a = elements[e];
@@ -67,30 +66,26 @@ var removeDeletedOnes = function(){
 };
 
 var asyncCheckForExistence = function(){
-	var anyScope = document.getElementsByClassName("status");
-
-	if(anyScope.length){
-		removeDeletedOnes();
-		return;
-	}
+	var elements = document.getElementsByClassName(".status.attn");
+	if(elements.length) removeDeletedOnes(elements);
 
 	setTimeout(function(){
 		asyncCheckForExistence();
 	}, 1000);
 };
 
-var withUrl = function(url) {
-	var isItunes = url.contains("itunesconnect.apple.com");
-	var isIAP = url.contains("addons");
-	var isSecure = url.contains("https://");
-	var control = isItunes && isIAP && isSecure;
-	
-	if(!control) 
-		return;
-	else
-		asyncCheckForExistence();
-};
-
 r(function(){
-	withUrl(window.location.href);
+
+	var url = window.location.href;
+
+  var isItunes = url.contains("itunesconnect.apple.com");
+  var isIAP = url.contains("addons");
+  var isSecure = url.contains("https://");
+  var control = isItunes && isIAP && isSecure;
+  
+  if(!control) 
+    return;
+  else
+    asyncCheckForExistence();
+
 });
